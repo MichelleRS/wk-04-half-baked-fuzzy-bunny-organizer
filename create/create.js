@@ -16,11 +16,19 @@ form.addEventListener('submit', async (e) => {
 window.addEventListener('load', async () => {
     // let's dynamically fill in the families dropdown from supabase
     // grab the select HTML element from the DOM
+    const select = document.querySelector('select');
     // go get the families from supabase
+    const families = await getFamilies();
     // for each family
-    // create an option tag
-    // set the option's value and text content
-    // and append the option to the select
+    for (let family of families) {
+        // create an option tag to represent each family
+        const option = document.createElement('option');
+        // set the option's value and text content
+        option.value = family.id;
+        option.textContent = family.name;
+        // and append the option to the select
+        select.append(option);
+    }
 });
 
 checkAuth();
