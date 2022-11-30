@@ -46,6 +46,7 @@ function displayFamilies(families) {
             bunnyEl.textContent = bunny.name;
             // add an event listener to the bunny el. On click, delete the bunny, then refetch and redisplay all families.
             // append this bunnyEl to the bunniesContainer
+            bunniesContainer.append(bunnyEl);
         }
         // append the bunniesContainer and familyName to the familyContainer
         familyContainer.append(familyName, bunniesContainer);
