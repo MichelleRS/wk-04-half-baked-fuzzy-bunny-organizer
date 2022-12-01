@@ -9,9 +9,12 @@ logoutButton.addEventListener('click', () => {
     logout();
 });
 
-function displayFamilies() {
+// Why not a separate render file? "It becomes complicated since I need to call displayFamilies from inside each bunny's click handler."
+function displayFamilies(families) {
     // fetch families from supabase
     // clear out the familiesEl
+    familiesEl.textContent = '';
+
     // loop through each family and for each family:
     // create three elements for each family, one for the whole family, one to hold the name, and one to hold the bunnies
     // your HTML Element should look like this:
@@ -22,14 +25,42 @@ function displayFamilies() {
     //        <div class="bunny">Bob</div>
     //    </div>
     // </div>
-    // add the bunnies css class to the bunnies el, and family css class to the family el
-    // put the family name in the name element
-    // for each of this family's bunnies
-    //    make an element with the css class 'bunny', and put the bunny's name in the text content
-    //    add an event listener to the bunny el. On click, delete the bunny, then refetch and redisplay all families.
-    // append this bunnyEl to the bunniesEl
-    // append the bunniesEl and nameEl to the familyEl
-    // append the familyEl to the familiesEl
+    for (let family of families) {
+        const familyContainer = document.createElement('section');
+        const familyName = document.createElement('h2');
+        const bunniesContainer = document.createElement('div');
+
+        // add classes to containers
+        // add the bunnies css class to the bunnies el, and family css class to the family el
+        bunniesContainer.classList.add('bunnies');
+        familyContainer.classList.add('family');
+
+        // put the family name in the name element
+        familyName.textContent = family.name;
+
+        // for each of this family's bunnies
+        for (let bunny of family.fuzzy_bunnies) {
+            // make an element with the css class 'bunny', and put the bunny's name in the text content
+            const bunnyEl = document.createElement('div');
+            bunnyEl.classList.add('bunny');
+            bunnyEl.textContent = bunny.name;
+            // add an event listener to the bunny el. On click, delete the bunny, then refetch and redisplay all families.
+            bunnyEl.addEventListener('click', async () => {
+                await deleteBunny(bunny.id);
+
+                const updatedFamilies = await getFamilies();
+
+                displayFamilies(updatedFamilies);
+            });
+
+            // append this bunnyEl to the bunniesContainer
+            bunniesContainer.append(bunnyEl);
+        }
+        // append the bunniesContainer and familyName to the familyContainer
+        familyContainer.append(familyName, bunniesContainer);
+        // append the familyContainer to the familiesEl
+        familiesEl.append(familyContainer);
+    }
 }
 
 window.addEventListener('load', async () => {
