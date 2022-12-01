@@ -19,7 +19,9 @@ form.addEventListener('submit', async (e) => {
         family_id: familyId,
     });
 
-    form.resest();
+    form.reset();
+    // send user to family page
+    location.replace('/');
 });
 
 window.addEventListener('load', async () => {
