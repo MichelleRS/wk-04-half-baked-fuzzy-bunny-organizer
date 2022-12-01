@@ -45,6 +45,14 @@ function displayFamilies(families) {
             bunnyEl.classList.add('bunny');
             bunnyEl.textContent = bunny.name;
             // add an event listener to the bunny el. On click, delete the bunny, then refetch and redisplay all families.
+            bunnyEl.addEventListener('click', async () => {
+                await deleteBunny(bunny.id);
+
+                const updatedFamilies = await getFamilies();
+
+                displayFamilies(updatedFamilies);
+            });
+
             // append this bunnyEl to the bunniesContainer
             bunniesContainer.append(bunnyEl);
         }
